@@ -1,0 +1,12 @@
+.progressBar {
+    @apply
+    w-full 
+    bg-gray-200 
+    h-3
+}
+
+.progressCompleted {
+    @apply
+    bg-blue-600 
+    h-1 
+}

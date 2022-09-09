@@ -1,0 +1,56 @@
+.paymentFormWrapper {
+    @apply
+    bg-white 
+    shadow-md 
+    rounded 
+    px-8 pt-6 pb-8 m-4
+}
+
+.formLine{
+    @apply
+    mt-3
+    mb-1
+    flex
+    items-center
+    justify-between
+}
+
+.formLabel {
+    @apply
+    text-gray-700 text-sm font-bold mb-2
+}
+
+.formInput {
+    @apply
+    shadow
+    appearance-none 
+    border rounded 
+    w-2/3 py-2 px-3 
+    text-gray-700 
+    leading-tight 
+    focus:outline-none focus:shadow-lg
+}
+
+.formError{
+    @apply
+    text-red-500
+}
+
+.calculateButton {
+    @apply
+    bg-teal-200 hover:bg-teal-500
+    text-white font-bold 
+    py-2 px-4 
+    rounded 
+    focus:outline-none 
+    hover:shadow-2xl
+}
+.resetButton {
+    @apply
+    bg-red-200 hover:bg-red-500
+    text-white font-bold 
+    py-2 px-4 
+    rounded 
+    focus:outline-none 
+    hover:shadow-2xl
+}
