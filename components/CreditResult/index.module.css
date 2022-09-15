@@ -1,0 +1,23 @@
+.card{
+    @apply
+    bg-white shadow-md rounded px-8 pt-6 pb-8 m-4
+    flex
+    flex-col
+    justify-between
+}
+
+.cardLine{
+    @apply
+font-bold text-lg mb-2
+flex flex-col
+}
+
+.cardButton{
+    @apply
+    bg-blue-200 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none hover:shadow-2xl
+}
+.cardOdeme{
+    @apply
+    ml-auto
+    font-normal
+}

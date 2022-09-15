@@ -33,7 +33,7 @@
 
 .formError{
     @apply
-    text-red-500
+    bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative
 }
 
 .calculateButton {
