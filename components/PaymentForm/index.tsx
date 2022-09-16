@@ -11,6 +11,8 @@ const PaymentForm = (props: Props) => {
   const {
     anaPara,
     setAnaPara,
+    karHesaplamaAraligi,
+    setkarHesaplamaAraligi,
     taksitSayisi,
     setTaksitSayisi,
     karOrani,
@@ -21,9 +23,11 @@ const PaymentForm = (props: Props) => {
     setkkdf,
     bsmv,
     setbsmv,
+    setToplamOdeme,
   } = useCreditContext();
   const { setProgress } = useProgressContext();
-  const [showErr, setShowErr] = useState(false);
+  const [showErr, setShowErr] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const anaparaRef = useRef<HTMLInputElement | null>(null);
 
   const {
@@ -39,6 +43,7 @@ const PaymentForm = (props: Props) => {
       anaPara,
       taksitSayisi,
       karOrani,
+      karHesaplamaAraligi,
       taksitAraligi,
       kkdf,
       bsmv,
@@ -46,16 +51,40 @@ const PaymentForm = (props: Props) => {
     enableReinitialize: false,
     onSubmit: (values) => {
       if (
-        values.anaPara !== 0 &&
-        values.taksitSayisi !== 0 &&
-        values.karOrani !== 0
+        Number(values.anaPara) !== 0 &&
+        Number(values.taksitSayisi) !== 0 &&
+        Number(values.karOrani) !== 0
       ) {
         setAnaPara(Number(values.anaPara));
         setTaksitSayisi(Number(values.taksitSayisi));
         setKarOrani(Number(values.karOrani));
+        setkarHesaplamaAraligi(values.karHesaplamaAraligi);
         setTaksitAraligi(values.taksitAraligi);
         setkkdf(Number(values.kkdf));
         setbsmv(Number(values.bsmv));
+
+        setToplamOdeme(
+          Math.round(
+            Number(values.anaPara) *
+              Math.pow(
+                1 + Number(values.karOrani) / 100,
+                (Number(values.taksitSayisi) *
+                  (values.taksitAraligi === "haftalik"
+                    ? 7
+                    : values.taksitAraligi === "aylik"
+                    ? 30
+                    : 360)) /
+                  (values.karHesaplamaAraligi === "haftalik"
+                    ? 7
+                    : values.karHesaplamaAraligi === "aylik"
+                    ? 30
+                    : values.karHesaplamaAraligi === "gunluk"
+                    ? 1
+                    : 360)
+              ) *
+              100
+          ) / 100
+        );
 
         setProgress("calculated");
       } else {
@@ -67,9 +96,10 @@ const PaymentForm = (props: Props) => {
       setAnaPara(0);
       setKarOrani(0);
       setTaksitSayisi(0);
-      setTaksitAraligi("yillik");
-      setkkdf(0);
-      setbsmv(0);
+      setkarHesaplamaAraligi("aylik");
+      setTaksitAraligi("aylik");
+      setkkdf(15);
+      setbsmv(5);
     },
     validationSchema,
   });
@@ -118,24 +148,6 @@ const PaymentForm = (props: Props) => {
         )}
 
         <div className={styles.formLine}>
-          <label className={styles.formLabel} htmlFor="karOrani">
-            Kar Oranı
-          </label>
-          <input
-            name="karOrani"
-            id="karOrani"
-            value={values.karOrani}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            placeholder="Kar Oranı"
-            className={styles.formInput}
-          />
-        </div>
-        {errors.karOrani && touched.karOrani && (
-          <div className={styles.formError}>{errors.karOrani}</div>
-        )}
-
-        <div className={styles.formLine}>
           <label className={styles.formLabel} htmlFor="taksitAraligi">
             Taksit Aralığı
           </label>
@@ -155,9 +167,50 @@ const PaymentForm = (props: Props) => {
         {errors.taksitAraligi && touched.taksitAraligi && (
           <div className={styles.formError}>{errors.taksitAraligi}</div>
         )}
+
+        <div className={styles.formLine}>
+          <label className={styles.formLabel} htmlFor="karOrani">
+            Kar Oranı (%)
+          </label>
+          <input
+            name="karOrani"
+            id="karOrani"
+            value={values.karOrani}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Kar Oranı"
+            className={styles.formInput}
+          />
+        </div>
+        {errors.karOrani && touched.karOrani && (
+          <div className={styles.formError}>{errors.karOrani}</div>
+        )}
+
+        <div className={styles.formLine}>
+          <label className={styles.formLabel} htmlFor="karHesaplamaAraligi">
+            Kar Hesaplama Aralığı
+          </label>
+          <select
+            name="karHesaplamaAraligi"
+            id="karHesaplamaAraligi"
+            value={values.karHesaplamaAraligi}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={styles.formInput}
+          >
+            <option value="gunluk">Günlük</option>
+            <option value="haftalik">Haftalık</option>
+            <option value="aylik">Aylık</option>
+            <option value="yillik">Yıllık</option>
+          </select>
+        </div>
+        {errors.karHesaplamaAraligi && touched.karHesaplamaAraligi && (
+          <div className={styles.formError}>{errors.karHesaplamaAraligi}</div>
+        )}
+
         <div className={styles.formLine}>
           <label className={styles.formLabel} htmlFor="kkdf">
-            KKDF(Vergi Oranı)
+            KKDF(Vergi Oranı %)
           </label>
           <input
             name="kkdf"
@@ -174,7 +227,7 @@ const PaymentForm = (props: Props) => {
         )}
         <div className={styles.formLine}>
           <label className={styles.formLabel} htmlFor="bsmv">
-            BSMV(Vergi Oranı)
+            BSMV(Vergi Oranı %)
           </label>
           <input
             name="bsmv"

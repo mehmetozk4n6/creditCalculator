@@ -7,14 +7,18 @@ type Props = {};
 
 const CreditResult = (props: Props) => {
   const { setProgress, progress } = useProgressContext();
-  const { anaPara, taksitSayisi, karOrani, taksitAraligi, kkdf, bsmv } =
-    useCreditContext();
-  const { cardLine, card, cardButton, cardOdeme } = styles;
-  // Bileşik → Kâr = ( Anapara * ( ( 1 + kâr oranı) ^ (gün sayısı / 30) ) ) - Anapara
-  // useRef, useImpretiveHandle, forwardRef kullanılması,
-  let toplamOdeme =
-    Math.round(anaPara * Math.pow(1 + karOrani / 100, taksitSayisi) * 100) /
-    100;
+  const {
+    anaPara,
+    taksitSayisi,
+    karOrani,
+    taksitAraligi,
+    karHesaplamaAraligi,
+    kkdf,
+    bsmv,
+    toplamOdeme,
+  } = useCreditContext();
+  const { card, cardLine, cardOdeme, cardButton } = styles;
+
   let taksitTutari = Math.round((toplamOdeme / taksitSayisi) * 100) / 100;
   let kar = Math.round((toplamOdeme - anaPara) * 100) / 100;
   return (
@@ -34,16 +38,8 @@ const CreditResult = (props: Props) => {
             <span className={cardOdeme}>{kar}</span>
           </div>
           <div>
-            <p className="text-xs">
-              Faiz oranı{" "}
-              {taksitAraligi === "haftalik"
-                ? "haftalık"
-                : taksitAraligi === "aylik"
-                ? "aylık"
-                : "yıllık"}{" "}
-              olarak hesaplanmıştır.
-            </p>
-            <p className="text-xs">Yıl 360 gün hesaplanmıştır.</p>
+            <p className="text-xs">Bileşik faiz hesabı kullanılmıştır.</p>
+            <p className="text-xs">Yıl 360 gün olarak hesaplanmıştır.</p>
           </div>
           <div className={cardLine}>
             <button

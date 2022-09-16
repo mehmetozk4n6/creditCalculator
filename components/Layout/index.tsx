@@ -12,7 +12,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   return (
     <ProgressWrapper>
       <CreditWrapper>
-        <div className="min-h-screen flex flex-col justify-between">
+        <div className="min-h-screen flex flex-col justify-between bg-gray-100">
           <Nav></Nav>
           <main>{children}</main>
           <Footer></Footer>

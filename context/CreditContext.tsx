@@ -20,6 +20,8 @@ interface CreditValues {
   setkkdf: React.Dispatch<React.SetStateAction<number>>;
   bsmv: number;
   setbsmv: React.Dispatch<React.SetStateAction<number>>;
+  toplamOdeme: number;
+  setToplamOdeme: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const CreditContext = createContext<CreditValues>({
@@ -29,14 +31,16 @@ const CreditContext = createContext<CreditValues>({
   setTaksitSayisi: () => 0,
   karOrani: 0,
   setKarOrani: () => 0,
-  karHesaplamaAraligi: "yillik",
-  setkarHesaplamaAraligi: () => "yillik",
-  taksitAraligi: "yillik",
-  setTaksitAraligi: () => "yillik",
+  karHesaplamaAraligi: "aylik",
+  setkarHesaplamaAraligi: () => "aylik",
+  taksitAraligi: "aylik",
+  setTaksitAraligi: () => "aylik",
   kkdf: 0,
   setkkdf: () => 0,
   bsmv: 0,
   setbsmv: () => 0,
+  toplamOdeme: 0,
+  setToplamOdeme: () => 0,
 });
 
 type Props = {
@@ -44,14 +48,15 @@ type Props = {
 };
 
 export const CreditWrapper: React.FC<Props> = ({ children }) => {
-  const [anaPara, setAnaPara] = useState<number>(0);
-  const [taksitSayisi, setTaksitSayisi] = useState<number>(0);
-  const [karOrani, setKarOrani] = useState<number>(0);
+  const [anaPara, setAnaPara] = useState<number>(10000);
+  const [taksitSayisi, setTaksitSayisi] = useState<number>(12);
+  const [karOrani, setKarOrani] = useState<number>(1.5);
   const [karHesaplamaAraligi, setkarHesaplamaAraligi] =
-    useState<KarHesaplamaAraligi>("yillik");
-  const [taksitAraligi, setTaksitAraligi] = useState<TaksitAraligi>("yillik");
-  const [kkdf, setkkdf] = useState<number>(0);
-  const [bsmv, setbsmv] = useState<number>(0);
+    useState<KarHesaplamaAraligi>("aylik");
+  const [taksitAraligi, setTaksitAraligi] = useState<TaksitAraligi>("aylik");
+  const [kkdf, setkkdf] = useState<number>(15);
+  const [bsmv, setbsmv] = useState<number>(5);
+  const [toplamOdeme, setToplamOdeme] = useState<number>(0);
 
   const creditValues = {
     anaPara,
@@ -68,6 +73,8 @@ export const CreditWrapper: React.FC<Props> = ({ children }) => {
     setkkdf,
     bsmv,
     setbsmv,
+    toplamOdeme,
+    setToplamOdeme,
   };
 
   return (
