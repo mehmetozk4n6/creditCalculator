@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import styles from "./index.module.css";
 import { useProgressContext } from "../../context/ProgressContext";
 import { useCreditContext } from "../../context/CreditContext";
+import TableRow from "./TableRow";
 
 type Props = {};
 
@@ -30,8 +31,6 @@ const DetailTable = (props: Props) => {
   useEffect(() => {
     if (odemeler.length < 1) return;
   }, [odemeler]);
-
-  // console.log(odemeler);
 
   return (
     <>
@@ -81,18 +80,7 @@ const DetailTable = (props: Props) => {
 
             <tbody className="overflow-auto">
               {odemeler.map((taksit, index) => (
-                <tr
-                  key={index}
-                  className={index % 2 === 0 ? detailTrOdd : detailTrEven}
-                >
-                  <td className={detailFirstTd}>{taksit.TAKSITNO}</td>
-                  <td className={detailTd}>{taksit.TAKSITTUTARI}</td>
-                  <td className={detailTd}>{taksit.ANAPARA}</td>
-                  <td className={detailTd}>{taksit.KALANANAPARA}</td>
-                  <td className={detailTd}>{taksit.KARTUTARI}</td>
-                  <td className={detailTd}>{taksit.KKDF}</td>
-                  <td className={detailTd}>{taksit.BSMV}</td>
-                </tr>
+                <TableRow key={index + 1} taksit={taksit} />
               ))}
             </tbody>
           </table>

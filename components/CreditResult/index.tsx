@@ -41,7 +41,6 @@ const CreditResult = (props: Props) => {
             <span className={cardOdeme}>{kar}</span>
           </div>
           <div>
-            <p className="text-xs">Bileşik faiz hesabı kullanılmıştır.</p>
             <p className="text-xs">Yıl 360 gün olarak hesaplanmıştır.</p>
           </div>
           <div className={cardLine}>

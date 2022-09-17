@@ -123,12 +123,18 @@ const PaymentForm = (props: Props) => {
               (kalananapara * Number(values.karOrani)) / 100);
         }
 
-        console.log(taksitler);
-
         setOdemeler(taksitler);
+
+        setShowErr(false);
 
         setProgress("calculated");
       } else {
+        if (Number(values.karOrani) === 0)
+          setError("Kar Oranı bilgisi 0 olamaz");
+        if (Number(values.taksitSayisi) === 0)
+          setError("Taksit Sayısı bilgisi 0 olamaz");
+        if (Number(values.anaPara) === 0) setError("Anapara bilgisi 0 olamaz");
+
         setShowErr(true);
       }
     },
@@ -294,7 +300,7 @@ const PaymentForm = (props: Props) => {
         </div>
         {showErr && (
           <div className={styles.formError}>
-            <span className="block sm:inline">Eksik Bilgi Girdiniz.</span>
+            <span className="block sm:inline">{error}</span>
             <span className="absolute top-0 bottom-0 right-0 px-2 py-1">
               <svg
                 className="fill-current h-6 w-6 text-red-500"
