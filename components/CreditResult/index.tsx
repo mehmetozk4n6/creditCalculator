@@ -16,11 +16,14 @@ const CreditResult = (props: Props) => {
     kkdf,
     bsmv,
     toplamOdeme,
+    odemeler,
+    setOdemeler,
   } = useCreditContext();
   const { card, cardLine, cardOdeme, cardButton } = styles;
 
   let taksitTutari = Math.round((toplamOdeme / taksitSayisi) * 100) / 100;
   let kar = Math.round((toplamOdeme - anaPara) * 100) / 100;
+
   return (
     <>
       {progress !== "start" && (

@@ -22,6 +22,8 @@ interface CreditValues {
   setbsmv: React.Dispatch<React.SetStateAction<number>>;
   toplamOdeme: number;
   setToplamOdeme: React.Dispatch<React.SetStateAction<number>>;
+  odemeler: Array<any>;
+  setOdemeler: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const CreditContext = createContext<CreditValues>({
@@ -41,6 +43,8 @@ const CreditContext = createContext<CreditValues>({
   setbsmv: () => 0,
   toplamOdeme: 0,
   setToplamOdeme: () => 0,
+  odemeler: [],
+  setOdemeler: () => Array<any>,
 });
 
 type Props = {
@@ -57,6 +61,7 @@ export const CreditWrapper: React.FC<Props> = ({ children }) => {
   const [kkdf, setkkdf] = useState<number>(15);
   const [bsmv, setbsmv] = useState<number>(5);
   const [toplamOdeme, setToplamOdeme] = useState<number>(0);
+  const [odemeler, setOdemeler] = useState([]);
 
   const creditValues = {
     anaPara,
@@ -75,6 +80,8 @@ export const CreditWrapper: React.FC<Props> = ({ children }) => {
     setbsmv,
     toplamOdeme,
     setToplamOdeme,
+    odemeler,
+    setOdemeler,
   };
 
   return (

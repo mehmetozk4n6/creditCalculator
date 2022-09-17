@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import { useProgressContext } from "../../context/ProgressContext";
 import { useCreditContext } from "../../context/CreditContext";
-import TableRow from "./TableRow";
 
 type Props = {};
 
@@ -17,18 +16,7 @@ const DetailTable = (props: Props) => {
     detailTrEven,
   } = styles;
   const { setProgress, progress } = useProgressContext();
-  const {
-    anaPara,
-    taksitSayisi,
-    karOrani,
-    taksitAraligi,
-    karHesaplamaAraligi,
-    kkdf,
-    bsmv,
-    toplamOdeme,
-  } = useCreditContext();
-  let taksitTutari: number;
-  let kar: number;
+  const { odemeler } = useCreditContext();
 
   if (progress === "viewDetails") {
     document.onkeydown = function (evt) {
@@ -39,9 +27,11 @@ const DetailTable = (props: Props) => {
     };
   }
 
-  taksitTutari = Math.round((toplamOdeme / taksitSayisi) * 100) / 100;
-  kar = Math.round((toplamOdeme - anaPara) * 100) / 100;
-  const [kalanAnapara, setKalanAnapara] = useState<number>(anaPara);
+  useEffect(() => {
+    if (odemeler.length < 1) return;
+  }, [odemeler]);
+
+  // console.log(odemeler);
 
   return (
     <>
@@ -90,31 +80,20 @@ const DetailTable = (props: Props) => {
             </thead>
 
             <tbody className="overflow-auto">
-              {Array.from(Array(taksitSayisi).keys()).map((taksit, index) => (
-                <TableRow
+              {odemeler.map((taksit, index) => (
+                <tr
                   key={index}
-                  index={index}
-                  anaPara={anaPara}
-                  taksitTutari={taksitTutari}
-                  karOrani={karOrani}
-                  kar={kar}
-                  kkdf={kkdf}
-                  bsmv={bsmv}
-                  toplamOdeme={toplamOdeme}
-                  kalanAnapara={kalanAnapara}
-                  setKalanAnapara={setKalanAnapara}
-                />
+                  className={index % 2 === 0 ? detailTrOdd : detailTrEven}
+                >
+                  <td className={detailFirstTd}>{taksit.TAKSITNO}</td>
+                  <td className={detailTd}>{taksit.TAKSITTUTARI}</td>
+                  <td className={detailTd}>{taksit.ANAPARA}</td>
+                  <td className={detailTd}>{taksit.KALANANAPARA}</td>
+                  <td className={detailTd}>{taksit.KARTUTARI}</td>
+                  <td className={detailTd}>{taksit.KKDF}</td>
+                  <td className={detailTd}>{taksit.BSMV}</td>
+                </tr>
               ))}
-
-              {/* <tr className={detailTrEven}>
-                <td className={detailFirstTd}>Taksit No</td>
-                <td className={detailTd}>Taksit Tutarı</td>
-                <td className={detailTd}>Ana Para</td>
-                <td className={detailTd}>Kalan Ana Para</td>
-                <td className={detailTd}>Kâr Tutarı</td>
-                <td className={detailTd}>KKDF</td>
-                <td className={detailTd}>BSMV</td>
-              </tr> */}
             </tbody>
           </table>
         </div>

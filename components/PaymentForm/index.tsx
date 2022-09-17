@@ -24,6 +24,7 @@ const PaymentForm = (props: Props) => {
     bsmv,
     setbsmv,
     setToplamOdeme,
+    setOdemeler,
   } = useCreditContext();
   const { setProgress } = useProgressContext();
   const [showErr, setShowErr] = useState<boolean>(false);
@@ -63,28 +64,68 @@ const PaymentForm = (props: Props) => {
         setkkdf(Number(values.kkdf));
         setbsmv(Number(values.bsmv));
 
-        setToplamOdeme(
-          Math.round(
-            Number(values.anaPara) *
-              Math.pow(
-                1 + Number(values.karOrani) / 100,
-                (Number(values.taksitSayisi) *
-                  (values.taksitAraligi === "haftalik"
-                    ? 7
-                    : values.taksitAraligi === "aylik"
-                    ? 30
-                    : 360)) /
-                  (values.karHesaplamaAraligi === "haftalik"
-                    ? 7
-                    : values.karHesaplamaAraligi === "aylik"
-                    ? 30
-                    : values.karHesaplamaAraligi === "gunluk"
-                    ? 1
-                    : 360)
-              ) *
-              100
-          ) / 100
-        );
+        let donemsayisi =
+          (Number(values.taksitSayisi) *
+            (values.taksitAraligi === "haftalik"
+              ? 7
+              : values.taksitAraligi === "aylik"
+              ? 30
+              : 360)) /
+          (values.karHesaplamaAraligi === "haftalik"
+            ? 7
+            : values.karHesaplamaAraligi === "aylik"
+            ? 30
+            : values.karHesaplamaAraligi === "gunluk"
+            ? 1
+            : 360);
+
+        let toplamOdem =
+          (Number(values.anaPara) /
+            ((Math.pow(1 + Number(values.karOrani) / 100, donemsayisi) - 1) /
+              ((Math.pow(1 + Number(values.karOrani) / 100, donemsayisi) *
+                Number(values.karOrani)) /
+                100))) *
+          donemsayisi;
+
+        let toplamOde = Math.round(toplamOdem * 100) / 100;
+
+        setToplamOdeme(toplamOde);
+
+        let taksitTutari =
+          Math.round((toplamOde / Number(values.taksitSayisi)) * 100) / 100;
+
+        let kalananapara = Number(values.anaPara);
+
+        let taksitler = [];
+
+        for (let index = 1; index <= Number(values.taksitSayisi); index++) {
+          let TAKSITNO = index;
+          let TAKSITTUTARI = taksitTutari;
+          let KARTUTARI = Math.round(kalananapara * values.karOrani) / 100;
+          let ANAPARA = Math.round((TAKSITTUTARI - KARTUTARI) * 100) / 100;
+          let KKDF = Math.round(KARTUTARI * kkdf) / 100;
+          let BSMV = Math.round(KARTUTARI * bsmv) / 100;
+          let KALANANAPARA = Math.round((kalananapara - ANAPARA) * 100) / 100;
+
+          taksitler.push({
+            TAKSITNO,
+            TAKSITTUTARI,
+            ANAPARA,
+            KALANANAPARA,
+            KARTUTARI,
+            KKDF,
+            BSMV,
+          });
+
+          kalananapara =
+            kalananapara -
+            (toplamOdem / Number(values.taksitSayisi) -
+              (kalananapara * Number(values.karOrani)) / 100);
+        }
+
+        console.log(taksitler);
+
+        setOdemeler(taksitler);
 
         setProgress("calculated");
       } else {
@@ -100,6 +141,7 @@ const PaymentForm = (props: Props) => {
       setTaksitAraligi("aylik");
       setkkdf(15);
       setbsmv(5);
+      setOdemeler([]);
     },
     validationSchema,
   });
