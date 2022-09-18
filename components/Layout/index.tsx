@@ -4,13 +4,18 @@ import Nav from "../Nav";
 import { CreditWrapper } from "../../context/CreditContext";
 import { ProgressWrapper } from "../../context/ProgressContext";
 import styles from "./index.module.css";
+import { MyRef } from "../Footer/index";
 
 type Props = {
   children?: React.ReactNode;
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const whiteRef = useRef();
+  const whiteRef = useRef({ changeMode: () => {} });
+
+  const handleClick = () => {
+    whiteRef.current.changeMode();
+  };
 
   return (
     <ProgressWrapper>
@@ -20,7 +25,7 @@ const Layout: React.FC<Props> = ({ children }) => {
           <button
             // Footer ın modunu değiştirmektedir.
             className={styles.changeColorBtn}
-            onClick={() => whiteRef.current?.changeMode()}
+            onClick={() => handleClick()}
           >
             Renk Değiştir
           </button>

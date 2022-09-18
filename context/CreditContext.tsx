@@ -44,7 +44,7 @@ const CreditContext = createContext<CreditValues>({
   toplamOdeme: 0,
   setToplamOdeme: () => 0,
   odemeler: [],
-  setOdemeler: () => Array<any>,
+  setOdemeler: () => [],
 });
 
 type Props = {

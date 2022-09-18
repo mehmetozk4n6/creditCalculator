@@ -7,14 +7,16 @@ import React, {
 import { VscGithub } from "react-icons/vsc";
 
 type Props = {};
+export type MyRef = {
+  changeMode: () => void;
+};
 
-// eslint-disable-next-line react/display-name
-const Footer = forwardRef((props: Props, ref: any) => {
+const Footer = (props: Props, ref: React.Ref<MyRef> | undefined) => {
   const [whitefooter, setwhitefooter] = useState(false);
 
   // footer ın modunu değiştirmektedir
   useImperativeHandle(ref, () => ({
-    changeMode() {
+    changeMode: () => {
       setwhitefooter(!whitefooter);
     },
   }));
@@ -31,6 +33,6 @@ const Footer = forwardRef((props: Props, ref: any) => {
       </a>
     </div>
   );
-});
+};
 
-export default Footer;
+export default forwardRef(Footer);
