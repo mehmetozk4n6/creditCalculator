@@ -116,7 +116,7 @@
   "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.184.tgz"
   "version" "4.14.184"
 
-"@types/node@18.7.15":
+"@types/node@^18.7.15":
   "integrity" "sha512-XnjpaI8Bgc3eBag2Aw4t2Uj/49lLBSStHWfqKvIuXD7FIrZyMLWp8KuAFHAqxMZYTF9l08N1ctUn9YNybZJVmQ=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-18.7.15.tgz"
   "version" "18.7.15"
