@@ -5,6 +5,6 @@
 - Kâr oranı
 - Taksit aralığı seçimi → aylık, haftalık, yıllık
 - Vergi oranı → bsmv ve kkdf
-Amaçlar
+### Amaçlar
 - Kullanıcı girdileri doğrultusunda kullanıcıya bilgilerin hesaplanarak aktarılması
 - Taksit ödemelerini gösteren detaylı tablonun sunulması
