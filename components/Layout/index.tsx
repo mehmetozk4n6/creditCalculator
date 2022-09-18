@@ -4,7 +4,6 @@ import Nav from "../Nav";
 import { CreditWrapper } from "../../context/CreditContext";
 import { ProgressWrapper } from "../../context/ProgressContext";
 import styles from "./index.module.css";
-import { MyRef } from "../Footer/index";
 
 type Props = {
   children?: React.ReactNode;

@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useImperativeHandle,
-  useCallback,
-} from "react";
+import React, { forwardRef, useState, useImperativeHandle } from "react";
 import { VscGithub } from "react-icons/vsc";
 
 type Props = {};
