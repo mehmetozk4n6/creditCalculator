@@ -14,9 +14,8 @@ const DetailTable = (props: Props) => {
 
   // ESC tuşu table i kapatır
   if (progress === "viewDetails") {
-    document.onkeydown = function (evt) {
-      evt = evt || window.event;
-      if (evt.keyCode === 27) {
+    document.onkeydown = (evt: KeyboardEvent) => {
+      if (evt.key === "Escape") {
         setProgress("calculated");
       }
     };
