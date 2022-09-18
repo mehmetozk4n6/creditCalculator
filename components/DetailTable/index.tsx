@@ -7,18 +7,12 @@ import TableRow from "./TableRow";
 type Props = {};
 
 const DetailTable = (props: Props) => {
-  const {
-    detailTable,
-    detailThead,
-    detailTh,
-    detailTrOdd,
-    detailFirstTd,
-    detailTd,
-    detailTrEven,
-  } = styles;
+  const { tableWrapper, detailTable, detailThead, detailTh, closeBtnWrapper } =
+    styles;
   const { setProgress, progress } = useProgressContext();
   const { odemeler } = useCreditContext();
 
+  // ESC tuşu table i kapatır
   if (progress === "viewDetails") {
     document.onkeydown = function (evt) {
       evt = evt || window.event;
@@ -28,6 +22,7 @@ const DetailTable = (props: Props) => {
     };
   }
 
+  // taksit sayısı 0 'sa component i render etmez.
   useEffect(() => {
     if (odemeler.length < 1) return;
   }, [odemeler]);
@@ -35,11 +30,8 @@ const DetailTable = (props: Props) => {
   return (
     <>
       {progress === "viewDetails" && (
-        <div
-          className="flex flex-col justify-center items-center fixed inset-0 z-10 outline-none focus:outline-none w-5/6 m-auto overflow-auto h-2/3"
-          style={{ flexFlow: "wrap" }}
-        >
-          <div className=" h-8 w-8 text-red-500 ml-auto sticky top-0 right-0">
+        <div className={tableWrapper} style={{ flexFlow: "wrap" }}>
+          <div className={closeBtnWrapper}>
             <svg
               className="fill-current"
               role="button"
@@ -78,9 +70,9 @@ const DetailTable = (props: Props) => {
               </tr>
             </thead>
 
-            <tbody className="overflow-auto">
+            <tbody>
               {odemeler.map((taksit, index) => (
-                <TableRow key={index + 1} taksit={taksit} />
+                <TableRow key={index} taksit={taksit} />
               ))}
             </tbody>
           </table>

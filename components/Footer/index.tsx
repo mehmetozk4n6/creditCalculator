@@ -12,6 +12,7 @@ type Props = {};
 const Footer = forwardRef((props: Props, ref: any) => {
   const [whitefooter, setwhitefooter] = useState(false);
 
+  // footer ın modunu değiştirmektedir
   useImperativeHandle(ref, () => ({
     changeMode() {
       setwhitefooter(!whitefooter);

@@ -5,15 +5,7 @@ type Props = {
 };
 
 const TableRow = ({ taksit }: Props) => {
-  const {
-    detailTable,
-    detailThead,
-    detailTh,
-    detailTrOdd,
-    detailFirstTd,
-    detailTd,
-    detailTrEven,
-  } = styles;
+  const { detailTrOdd, detailFirstTd, detailTd, detailTrEven } = styles;
 
   return (
     <tr className={taksit.TAKSITNO % 2 === 0 ? detailTrOdd : detailTrEven}>

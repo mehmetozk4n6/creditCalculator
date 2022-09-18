@@ -7,20 +7,10 @@ type Props = {};
 
 const CreditResult = (props: Props) => {
   const { setProgress, progress } = useProgressContext();
-  const {
-    anaPara,
-    taksitSayisi,
-    karOrani,
-    taksitAraligi,
-    karHesaplamaAraligi,
-    kkdf,
-    bsmv,
-    toplamOdeme,
-    odemeler,
-    setOdemeler,
-  } = useCreditContext();
+  const { anaPara, taksitSayisi, toplamOdeme } = useCreditContext();
   const { card, cardLine, cardOdeme, cardButton } = styles;
 
+  // context den alığı verileri hesaplar
   let taksitTutari = Math.round((toplamOdeme / taksitSayisi) * 100) / 100;
   let kar = Math.round((toplamOdeme - anaPara) * 100) / 100;
 

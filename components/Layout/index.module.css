@@ -1,0 +1,9 @@
+.wrapper{
+    @apply
+    min-h-screen flex flex-col justify-between bg-gray-100
+}
+
+.changeColorBtn{
+    @apply
+    fixed bg-blue-300 hover:bg-blue-500 top-2 text-white rounded-md px-2
+}

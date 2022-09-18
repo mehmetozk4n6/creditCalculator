@@ -26,6 +26,7 @@ const PaymentForm = (props: Props) => {
     setToplamOdeme,
     setOdemeler,
   } = useCreditContext();
+
   const { setProgress } = useProgressContext();
   const [showErr, setShowErr] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -52,10 +53,12 @@ const PaymentForm = (props: Props) => {
     enableReinitialize: false,
     onSubmit: (values) => {
       if (
+        // anapara, taksit sayısı, karoranı 0 olduğunda submit etme
         Number(values.anaPara) !== 0 &&
         Number(values.taksitSayisi) !== 0 &&
         Number(values.karOrani) !== 0
       ) {
+        // creditContext e değerleri gönder
         setAnaPara(Number(values.anaPara));
         setTaksitSayisi(Number(values.taksitSayisi));
         setKarOrani(Number(values.karOrani));
@@ -64,6 +67,14 @@ const PaymentForm = (props: Props) => {
         setkkdf(Number(values.kkdf));
         setbsmv(Number(values.bsmv));
 
+        /*
+          Kullanılan Formul:
+
+          Aylık taksit tutarı = Anapara / (((1+karOranı)^donemsayisi-1) / ((1+karOranı)^donemsayisi*karOranı))
+
+        */
+
+        // donem sayısı seçeneklere göre hesabı
         let donemsayisi =
           (Number(values.taksitSayisi) *
             (values.taksitAraligi === "haftalik"
@@ -79,6 +90,7 @@ const PaymentForm = (props: Props) => {
             ? 1
             : 360);
 
+        // yapılacak olan toplam ödeme
         let toplamOdem =
           (Number(values.anaPara) /
             ((Math.pow(1 + Number(values.karOrani) / 100, donemsayisi) - 1) /
@@ -87,13 +99,16 @@ const PaymentForm = (props: Props) => {
                 100))) *
           donemsayisi;
 
+        // iki ondalığa yuvarlama işlemi
         let toplamOde = Math.round(toplamOdem * 100) / 100;
 
         setToplamOdeme(toplamOde);
 
+        // ödenecek toplam taksit tutarı
         let taksitTutari =
           Math.round((toplamOde / Number(values.taksitSayisi)) * 100) / 100;
 
+        // taksitleri hesaplamak için kullanılacak olan anapara
         let kalananapara = Number(values.anaPara);
 
         let taksitler = [];
@@ -101,12 +116,13 @@ const PaymentForm = (props: Props) => {
         for (let index = 1; index <= Number(values.taksitSayisi); index++) {
           let TAKSITNO = index;
           let TAKSITTUTARI = taksitTutari;
-          let KARTUTARI = Math.round(kalananapara * values.karOrani) / 100;
-          let ANAPARA = Math.round((TAKSITTUTARI - KARTUTARI) * 100) / 100;
-          let KKDF = Math.round(KARTUTARI * kkdf) / 100;
-          let BSMV = Math.round(KARTUTARI * bsmv) / 100;
+          let KARTUTARI = Math.round(kalananapara * values.karOrani) / 100; // her dönemki kar tutarı kalan anaparanın karoranı ile çarpımına eşittir
+          let ANAPARA = Math.round((TAKSITTUTARI - KARTUTARI) * 100) / 100; // taksit tutarı içindeki ödenenen anapara
+          let KKDF = Math.round(KARTUTARI * kkdf) / 100; // karOranının kkdf ile çarpımı
+          let BSMV = Math.round(KARTUTARI * bsmv) / 100; // karOranının bsmv ile çarpımı
           let KALANANAPARA = Math.round((kalananapara - ANAPARA) * 100) / 100;
 
+          // taksitleri dizi içerisina gönderie
           taksitler.push({
             TAKSITNO,
             TAKSITTUTARI,
@@ -117,16 +133,18 @@ const PaymentForm = (props: Props) => {
             BSMV,
           });
 
+          // kalan anapara hesabını tekrar yapmanın sebebi yuvarlamalarla oluşacak farklılıkların kaldırılması ve bir sonraki döneme düşen anaparayı devretmek
           kalananapara =
             kalananapara -
             (toplamOdem / Number(values.taksitSayisi) -
               (kalananapara * Number(values.karOrani)) / 100);
         }
 
+        // taksitleri context e gönderir
         setOdemeler(taksitler);
-
+        // hata mesajı açıksa kapatıe
         setShowErr(false);
-
+        // Progress barı çıkartıp diğer component açar
         setProgress("calculated");
       } else {
         if (Number(values.karOrani) === 0)

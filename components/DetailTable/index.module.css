@@ -1,3 +1,13 @@
+.tableWrapper{
+    @apply
+    flex flex-col justify-center items-center fixed inset-0 z-10 outline-none focus:outline-none w-5/6 m-auto overflow-auto h-2/3
+}
+
+.closeBtnWrapper{
+    @apply
+    h-8 w-8 text-red-500 ml-auto sticky top-0 right-0
+}
+
 .detailTable{
     @apply
     min-w-full
@@ -10,7 +20,7 @@
 }
 .detailTh{
     @apply
-    text-sm font-medium text-gray-900 px-6 py-4 text-left
+    text-sm font-medium text-gray-900 px-1 py-4 text-left
 }
 .detailTrOdd{
     @apply
@@ -26,5 +36,5 @@
 }
 .detailTd{
     @apply
-    text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap
+    text-sm text-gray-900 font-light px-1 py-4 whitespace-nowrap
 }
